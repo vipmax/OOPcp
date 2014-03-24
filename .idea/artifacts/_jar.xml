@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="КП:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/_jar</output-path>
+    <root id="archive" name="КП.jar">
+      <element id="module-output" name="КП" />
+    </root>
+  </artifact>
+</component>

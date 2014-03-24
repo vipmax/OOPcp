@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_кп" default="compile.module.кп">
+  <dirname property="module.кп.basedir" file="${ant.file.module_кп}"/>
+  
+  <property name="module.jdk.home.кп" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.кп" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.кп" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.кп" value="${compiler.args}"/>
+  
+  <property name="кп.output.dir" value="${module.кп.basedir}/out/production/КП"/>
+  <property name="кп.testoutput.dir" value="${module.кп.basedir}/out/test/КП"/>
+  
+  <path id="кп.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="кп.module.production.classpath">
+    <path refid="${module.jdk.classpath.кп}"/>
+  </path>
+  
+  <path id="кп.runtime.production.module.classpath">
+    <pathelement location="${кп.output.dir}"/>
+  </path>
+  
+  <path id="кп.module.classpath">
+    <path refid="${module.jdk.classpath.кп}"/>
+    <pathelement location="${кп.output.dir}"/>
+  </path>
+  
+  <path id="кп.runtime.module.classpath">
+    <pathelement location="${кп.testoutput.dir}"/>
+    <pathelement location="${кп.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.кп">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.кп">
+    <patternset refid="excluded.from.module.кп"/>
+  </patternset>
+  
+  <path id="кп.module.sourcepath">
+    <dirset dir="${module.кп.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.кп" depends="compile.module.кп.production,compile.module.кп.tests" description="Compile module КП"/>
+  
+  <target name="compile.module.кп.production" depends="register.custom.compilers" description="Compile module КП; production classes">
+    <mkdir dir="${кп.output.dir}"/>
+    <javac2 destdir="${кп.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.кп}/javac">
+      <compilerarg line="${compiler.args.кп}"/>
+      <bootclasspath refid="кп.module.bootclasspath"/>
+      <classpath refid="кп.module.production.classpath"/>
+      <src refid="кп.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.кп"/>
+    </javac2>
+    
+    <copy todir="${кп.output.dir}">
+      <fileset dir="${module.кп.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.кп.tests" depends="register.custom.compilers,compile.module.кп.production" description="compile module КП; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.кп" description="cleanup module">
+    <delete dir="${кп.output.dir}"/>
+    <delete dir="${кп.testoutput.dir}"/>
+  </target>
+</project>
